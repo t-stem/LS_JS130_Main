@@ -30,3 +30,30 @@ console.log(reduce(stooges, (reversedStooges, stooge) => {
   return reversedStooges;
 }, []));
 // => ["Curly", "Larry", "Mo"]
+
+
+
+
+function filter(arr, callback) {
+  return reduce(arr, (filteredArr, currValue) => {
+    if (callback(currValue) === true) {
+      filteredArr.push(currValue);
+    }
+    return filteredArr; // FIX: THE CALLBACK HAS TO RETURN A VALUE
+  }, []);
+}
+
+console.log(filter([1, 2, 3, 3], (num) => num === 3));
+console.log(filter(['a', 'a', 'b', 'a', 'b', 'c'], (char) => ['b', 'c'].includes(char)));
+
+
+
+function map(arr, callback) {
+  return reduce(arr, (mappedArr, currElement) => {
+      mappedArr.push(callback(currElement));
+      return mappedArr;
+  }, []);
+}
+
+console.log(map([1, 2, 3], (num) => num * 2));
+console.log(map(['a', 'b', 'c'], (char) => char + 'x'));
