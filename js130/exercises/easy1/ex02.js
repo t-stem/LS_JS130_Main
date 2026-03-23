@@ -12,7 +12,7 @@ function divisors(num) {
     if (num % i === 0 && !divisors.includes(i)) {
       divisors.push(i);
       if (num !== 1) {
-        divisors.push(num / i);
+        divisors.push(num / i);c
       }
 
     }
@@ -20,6 +20,24 @@ function divisors(num) {
   return divisors.sort((a, b) => a - b);
 }
 
+
+// ALTERNATIVE
+
+function divisors(num) {
+  let result = [];
+
+  for (let i = 1; i <= Math.sqrt(num); i += 1) {
+    if (num % i === 0) {
+      result.push(i);
+      let pair = num / i;
+      if (pair !== i) {
+        result.push(pair);
+      }
+    }
+  }
+
+  return result.sort((a, b) => a - b);
+}
 
 let p = console.log;
 
