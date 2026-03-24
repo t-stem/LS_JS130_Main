@@ -76,28 +76,51 @@ let item = createItem('sweater', 'clothing', 1)
 console.log(item)
 
 let itemManager = {
-  create() {
-    // STUB
+  items: [],
+
+  create(name, category, quantity) {
+    let item = createItem(name, category, quantity);
+    if (item.notValid) return false
+    this.items.push(item);
+    return true;
   },
 
-  update() {
-    // STUB
+  find(skuCode) {
+    let foundItems = this.items.filter(item => item.skuCode === skuCode);
+    return foundItems[0];
   },
 
-  delete() {
-    // STUB
+  update(skuCode, obj) {
+    let item = find(skuCode);
+    if (obj.name) {
+      item.name = obj.name;
+    }
+
+    if (obj.category) {
+      item.category = obj.category;
+    }
+
+    if (obj.skuCode) {
+      item.skuCode = obj.skuCode;
+    }
+
+    if (obj.quantity) {
+      obj.quantity = item.quantity;
+    }
   },
 
-  items() {
-    // STUB
+  delete(skuCode) {
+    let item = find(skuCode);
+    let index = this.items.indexOf(item);
+    this.items.splice(index, 1);
   },
 
   inStock() {
-    // STUB
+    return this.items.filter(item => item.quantity > 0);
   },
 
-  itemsInCategory() {
-    // STUB
+  itemsInCategory(category) {
+    return this.items.filter(item => item.category === category);
   }
 }
 
