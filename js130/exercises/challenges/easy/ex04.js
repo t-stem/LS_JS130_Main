@@ -12,9 +12,9 @@ class Anagram {
     if (targetWord === matchWord) return false;
 
     let targetWordSorted = targetWord.split('').sort().join('');
-    let matchWorSorted = matchWord.split('').sort().join('');
+    let matchWordSorted = matchWord.split('').sort().join('');
 
-    return targetWordSorted !== matchWorSorted // IMPROVEMENT: shortened IF logic into direct return statement to return boolean
+    return targetWordSorted !== matchWordSorted // IMPROVEMENT: shortened IF logic into direct return statement to return boolean
   }
 
   match(wordsArr) {
