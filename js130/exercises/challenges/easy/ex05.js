@@ -9,10 +9,22 @@ class Scrabble {
     10: ['Q', 'Z']
   });
 
-  static LOOKUP = {};
+  static buildLookup() { // IMPROVEMENT: added this code as static function rather than separate code outside class
+    let lookup = {};
+    
+    Object.keys(Scrabble.VALUES).forEach(value => {
+      Scrabble.VALUES[value].forEach(letter => {
+        lookup[letter] = Number(value);
+      });
+    });
 
-  static score = function(word) {
-    if (word === null) return 0;
+    return Object.freeze(lookup);
+  }
+
+  static LOOKUP = Scrabble.buildLookup(); // IMPROVEMENT: changed to function call
+
+  static score(word) { // IMPROVEMENT: removed function expression syntax for consistency
+    if (!word) return 0; // IMPROVEMENT: instead of word === null, cover all falsy values
 
     let cleanWord = Scrabble.clean(word);
 
@@ -22,25 +34,19 @@ class Scrabble {
       .reduce((sum, value) => sum + value, 0);
   }
 
-  static clean = function(word) {
+  static clean(word) { // IMPROVEMENT: removed function expression syntax for consistency
     return word
       .toUpperCase()
       .replace(/[^A-Z]/g, '');
   }
 
   constructor(word) {
-    this.word = word;
+    this.word = word || ''; // IMPROVEMENT: adden normalization of word using ||
   }
 
   score() {
     return Scrabble.score(this.word);
   }
 }
-
-Object.keys(Scrabble.VALUES).forEach(value => {
-  Scrabble.VALUES[value].forEach(letter => {
-    Scrabble.LOOKUP[letter] = Number(value);
-  })
-})
 
 module.exports = Scrabble;
