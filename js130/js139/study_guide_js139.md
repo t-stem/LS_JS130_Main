@@ -48,3 +48,16 @@ Before moving on to the next lesson, be sure that you're comfortable with the fo
 - Modules (focus on CommonJS modules)
 - Throwing and catching exceptions
 - Garbage Collection (high-level view)
+
+## Packaging summary
+In this lesson, we covered some Node.js tooling, and then walked through setting up a simple JavaScript application as a node package. While we didn't go all the way to the publishing stage, you now know enough to follow the directions on the npm website package and release your module.
+
+As you move on, remember the following details:
+
+npm provides a library of code that you can download and run, or use directly inside your JavaScript programs. You use the npm command to manage the packages you need.
+
+Babel is a JavaScript transpiler that compiles code written with newer syntax into older code. Transpilation is useful when we want to use the latest JavaScript features, but also want our code to run in environments that don't support those features. Typically, that means older browsers. Babel's command-line interface (CLI) works with the Babel core library and the required presets to transpile the latest JavaScript to the desired older version of JavaScript.
+
+The package.json file provides a way to list all of your project's dependencies and their versions in a single file. npm uses this file to resolve the interdependencies between all the packages and installs the appropriate versions.
+
+npm also provides the mechanisms you need to publish your own modules. Those modules can be packages of code that you require into your JavaScript programs or independent command-line programs. For instance, we require readline-sync in our programs to solicit input from the user, and use the jest command-line program from the jest package.
