@@ -4,9 +4,7 @@ class Octal {
   }
 
   isValid() {
-    if (/[^0-7]/.test(this.numStr)) return false;
-
-    return true;
+    return !/[^0-7]+$/.test(this.numStr); // IMPROVEMENT: simplified if logic, addition of +$ in regex treats empty strings as invalid (requires at least once char)
   }
 
   toDecimal() {
