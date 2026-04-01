@@ -1,19 +1,20 @@
+  // IMPROVEMENT: these can be outside verse() 
+  function plural(num) {
+    return num === 1 ? '' : 's'
+  }
+
+  function lastBottle(numBottles) {
+    return numBottles === 0 ? 'no more' : numBottles;
+  }
+
+  function sentenceCase(str) {
+    if (!str) return str;
+
+    return str[0].toUpperCase() + str.slice(1);
+  }
+
 let BeerSong = {
   verse(bottleCount) {
-    function plural(num) {
-      return num === 1 ? '' : 's'
-    }
-
-    function lastBottle(numBottles) {
-      return numBottles === 0 ? 'no more' : numBottles;
-    }
-
-    function sentenceCase(str) {
-      if (!str) return str;
-
-      return str[0].toUpperCase() + str.slice(1);
-    }
-
     let bottlePhrase = String(bottleCount);
     let newBottleCount = bottleCount - 1;
     let oneOrIt = bottleCount === 1 ? 'it' : 'one';
@@ -43,18 +44,7 @@ let BeerSong = {
   },
 
   lyrics() {
-    let bottles = 99;
-    let lyrics = '';
-
-    do {
-      let newLine = bottles === 0 ? '' : '\n';
-      let verse = this.verse(bottles) + newLine;
-      lyrics += verse;
-      bottles -= 1;
-    }
-    while (bottles >= 0)
-
-    return lyrics;
+    return this.verses(99, 0); // IMPROVEMENT: delegated to this.verses() instead of new code
   }
 
   
