@@ -1,6 +1,7 @@
+const ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'; // CORRECTION: when exporting Diamond, the makeDiamond method closes over ALPHABET from the outer scope. Therefore, ALPHABET will be available to the method in the destination file and doesn't need to be exported separatedly
+
 const Diamond = {
   makeDiamond(char) {
-    const ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     let charIndex = ALPHABET.indexOf(char);
 
     let diamondWidth = charIndex * 2 + 1;
@@ -14,18 +15,13 @@ const Diamond = {
       let insideSpaces = ' '.repeat(insideSpacesCount);
       let outsideSpaces = ' '.repeat(outsideSpaceCount);
 
-      if (lineIndex === 0) {
-        upperTriangle.push(outsideSpaces + currChar + outsideSpaces + '\n');
-      } else {
-        upperTriangle.push(outsideSpaces + currChar + insideSpaces + currChar + outsideSpaces + '\n');
-      }
+      let middleOfLine = lineIndex === 0 ? currChar : currChar + insideSpaces + currChar; // IMPROVEMENT: factored this repeptitive part out of prior IF-ELSE logic
+      upperTriangle.push(outsideSpaces + middleOfLine + outsideSpaces + '\n');
     }
 
     let lowerTriangle = upperTriangle.slice(0, upperTriangle.length - 1).reverse();
     let diamondArr = upperTriangle.concat(lowerTriangle);
-    let diamondStr = diamondArr.join('')
-    console.log(diamondStr);
-    return diamondStr;
+    return diamondArr.join('')
   }
 }
 
