@@ -10,13 +10,13 @@ class Robot {
     this._name = null;
   }
 
-  rename() {
+  genName() {
     let name;
 
     do {
       name = '';
       for (let i = 0; i < Robot.NAME_LETTER_COUNT; i += 1) {
-        let randomCharIndex = Math.floor(Math.random() * (Robot.ALPHABET.length + 1));
+        let randomCharIndex = Math.floor(Math.random() * (Robot.ALPHABET.length - 1));
         name += Robot.ALPHABET[randomCharIndex];
       }
 
@@ -26,6 +26,11 @@ class Robot {
     }
     while (Robot.names.includes(name));
 
+    return name;
+  }
+
+  rename() {
+    let name = this.genName();
     this._name = name;
     Robot.names.push(name);
   }
@@ -39,6 +44,8 @@ class Robot {
   }
 
   reset() {
+    let nameIndex = Robot.names.indexOf(this._name);
+    Robot.names.splice(nameIndex, 1);
     this.rename();
   }
 
