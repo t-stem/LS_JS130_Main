@@ -7,11 +7,11 @@ class Robot {
   
   static names = [];
   
-  static checkNameUniqueness(name) {
+  static checkNameUniqueness(name) { // IMPROVEMENT: split from rename and moved to static
     return Robot.names.includes(name);
   }
 
-  static genName() {
+  static genName() { // IMPROVEMENT: split from rename and moved to static
     let name = '';
 
     for (let i = 0; i < Robot.NAME_LETTER_COUNT; i += 1) {
