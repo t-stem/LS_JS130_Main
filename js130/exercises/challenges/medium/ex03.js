@@ -1,6 +1,7 @@
 class Clock {
   static HOURS_IN_DAY = 24;
   static MINS_IN_HOUR = 60;
+  static MINS_IN_DAY = Clock.MINS_IN_HOUR * Clock.HOURS_IN_DAY; // IMPROVEMENT: added
   
   static validHour(hour) {
     return !Number.isNaN(hour) && hour >= 0 && hour < Clock.HOURS_IN_DAY;
@@ -11,8 +12,8 @@ class Clock {
   }
 
   static makeTimeStr(time) {
-    timeStr = String(time);
-    return timeStr.length === 1 ? '0' + time : time;
+    let timeStr = String(time); // FIX: added let declaration
+    return timeStr.length === 1 ? '0' + timeStr : timeStr; // FIX: timeStr instead of time
   }
   
   static at(hour, min = 0) {
@@ -45,7 +46,8 @@ class Clock {
   }
 
   subtract(fewerMins) {
-    let extraMins = Clock.HOURS_IN_DAY * Clock.MINS_IN_HOUR - fewerMins;
+    let fewerMinsWrapped = fewerMins % Clock.MINS_IN_DAY; // FIX: accounted for feweMins adding up to more than one day
+    let extraMins = Clock.MINS_IN_DAY - fewerMinsWrapped;
     return this.add(extraMins);
   }
 
