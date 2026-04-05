@@ -2,7 +2,7 @@ class Meetup {
   static FIRST_OF_MONTH = 1;
   static DAYS_IN_WEEK = 7;
 
-  static TARGET_ORDINAL_DIFFS = {
+  static WEEK_OFFSET_BY_ORDINAL = {
     first: 0, 
     second: 1, 
     third: 2, 
@@ -10,7 +10,7 @@ class Meetup {
     fifth: 4, // may not happen in every month
   }
 
-  static TARGET_ORDINALS = Object.keys(Meetup.TARGET_ORDINAL_DIFFS);
+  static ORDINAL_SCHEDULES = Object.keys(Meetup.WEEK_OFFSET_BY_ORDINAL);
 
   static WEEKDAY_NAMES = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
 
@@ -19,75 +19,75 @@ class Meetup {
   constructor(year, month) {
     this.year = year;
     this.month = month;
-    this.monthIndex = this.month - 1;
+    this.zeroBasedMonthIndex = this.month - 1;
   }
 
-  isValidDate(date) {
-    return date > 0 && date <= this.getLastOfMonthDate();
+  isValidDayOfMonth(dayOfMonth) {
+    return dayOfMonth > 0 && dayOfMonth <= this.numLastDayOfMonth();
   }
 
-  getFirstOfMonthDay() {
-    let weekdayIndex = new Date(this.year, this.monthIndex, Meetup.FIRST_OF_MONTH).getDay();
+  nameFirstWeekdayOfMonth() {
+    let weekdayIndex = new Date(this.year, this.zeroBasedMonthIndex, Meetup.FIRST_OF_MONTH).getDay();
     return Meetup.WEEKDAY_NAMES[weekdayIndex];
   }
 
-  getLastOfMonthDate() {
-    return new Date(this.year, this.month, 0).getDate(); // using month instead of monthIndex to get the next month;
+  numLastDayOfMonth() {
+    return new Date(this.year, this.month, 0).getDate(); // using month instead of zeroBasedMonthIndex to get the next month;
   }
 
-  daysDiffBetweenWeekdayAndFirstOfMonth(weekDay) {
-    let dayOfFirst = this.getFirstOfMonthDay().toLowerCase()
-    let diff = Meetup.WEEKDAY_NAMES.indexOf(weekDay) - Meetup.WEEKDAY_NAMES.indexOf(dayOfFirst);
-    return diff >= 0 ? diff : diff + Meetup.DAYS_IN_WEEK;
+  offsetWeekdayToFirstOfMonth(weekdayName) {
+    let firstOfMonthWeekdayName = this.nameFirstWeekdayOfMonth().toLowerCase()
+    let offsetDays = Meetup.WEEKDAY_NAMES.indexOf(weekdayName) - Meetup.WEEKDAY_NAMES.indexOf(firstOfMonthWeekdayName);
+    return offsetDays >= 0 ? offsetDays : offsetDays + Meetup.DAYS_IN_WEEK;
   }
 
-  getDateIfOrdinal(weekDay, targetDay) {
-    let targetDaysAfterFirstOfMonth = this.daysDiffBetweenWeekdayAndFirstOfMonth(weekDay);
-    return Meetup.FIRST_OF_MONTH + targetDaysAfterFirstOfMonth + Meetup.TARGET_ORDINAL_DIFFS[targetDay] * Meetup.DAYS_IN_WEEK;
+  getDayOfMonthIfOrdinal(weekdayName, schedule) {
+    let targetDaysAfterFirstOfMonth = this.offsetWeekdayToFirstOfMonth(weekdayName);
+    return Meetup.FIRST_OF_MONTH + targetDaysAfterFirstOfMonth + Meetup.WEEK_OFFSET_BY_ORDINAL[schedule] * Meetup.DAYS_IN_WEEK;
   }
 
-  getDateIfLast(weekDay) {
-    let targetDaysAfterFirstOfMonth = this.daysDiffBetweenWeekdayAndFirstOfMonth(weekDay);
-    let dateOfFirstWeekdayOfMonth = Meetup.FIRST_OF_MONTH + targetDaysAfterFirstOfMonth;
+  getDayOfMonthIfLast(weekdayName) {
+    let daysOffsetFromFirstOfMonth = this.offsetWeekdayToFirstOfMonth(weekdayName);
+    let firstWeekdayDayOfMonth = Meetup.FIRST_OF_MONTH + daysOffsetFromFirstOfMonth;
 
-    for (let weeksAfter = Meetup.TARGET_ORDINAL_DIFFS['fifth']; weeksAfter >= Meetup.TARGET_ORDINAL_DIFFS['fourth']; weeksAfter -= 1) {
-      let dateOfWeekday = dateOfFirstWeekdayOfMonth + weeksAfter * Meetup.DAYS_IN_WEEK;
-      if (this.isValidDate(dateOfWeekday)) return dateOfWeekday;
+    for (let weeksAfter = Meetup.WEEK_OFFSET_BY_ORDINAL['fifth']; weeksAfter >= Meetup.WEEK_OFFSET_BY_ORDINAL['fourth']; weeksAfter -= 1) {
+      let weekdayDayOfMonth = firstWeekdayDayOfMonth + weeksAfter * Meetup.DAYS_IN_WEEK;
+      if (this.isValidDayOfMonth(weekdayDayOfMonth)) return weekdayDayOfMonth;
     }
 
     return null;
   }
 
-  getDateIfTeenth(weekDay) {
+  getDayOfMonthIfTeenth(weekdayName) {
     for (let teenth of Meetup.TEENTHS) {
-      let currDayIndex = new Date(this.year, this.monthIndex, teenth).getDay();
-      let currDay = Meetup.WEEKDAY_NAMES[currDayIndex];
+      let currDayIndex = new Date(this.year, this.zeroBasedMonthIndex, teenth).getDay();
+      let currDayName = Meetup.WEEKDAY_NAMES[currDayIndex];
 
-      if (currDay === weekDay) return teenth;
+      if (currDayName === weekdayName) return teenth;
     }
 
     return null;
   }
 
-  day(weekDay, targetDay) {
-    weekDay = weekDay.toLowerCase();
-    targetDay = targetDay.toLowerCase();
-    let targetDate;
+  day(weekdayName, schedule) {
+    weekdayName = weekDay.toLowerCase();
+    schedule = schedule.toLowerCase();
+    let targetDayOfMonth;
 
-    if (Meetup.TARGET_ORDINALS.includes(targetDay)) {
-      targetDate = this.getDateIfOrdinal(weekDay, targetDay);
+    if (Meetup.ORDINAL_SCHEDULES.includes(schedule)) {
+      targetDayOfMonth = this.getDayOfMonthIfOrdinal(weekdayName, schedule);
 
-      targetDate = this.isValidDate(targetDate) ? targetDate : null;
+      targetDayOfMonth = this.isValidDayOfMonth(targetDate) ? targetDate : null;
 
-    } else if (targetDay === 'last') {
-      targetDate = this.getDateIfLast(weekDay);
+    } else if (schedule === 'last') {
+      targetDate = this.getDayOfMonthIfLast(weekdayName);
 
     } else {
-      targetDate = this.getDateIfTeenth(weekDay, targetDay); 
+      targetDayOfMonth = this.getDayOfMonthIfTeenth(weekdayName); 
 
     }
 
-    return targetDate === null ? null : new Date(this.year, this.monthIndex, targetDate);
+    return targetDayOfMonth === null ? null : new Date(this.year, this.zeroBasedMonthIndex, targetDayOfMonth);
   }
 }
 
