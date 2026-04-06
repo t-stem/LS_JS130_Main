@@ -23,7 +23,7 @@ class Element {
 
 class SimpleLinkedList {
   static isLastNode(node) {
-    if (!(node instanceof SimpleLinkedList)) return null;
+    if (!(node instanceof Element)) return null;
 
     return node.isTail() === true;
   }
