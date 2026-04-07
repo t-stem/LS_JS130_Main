@@ -74,7 +74,7 @@ class SimpleLinkedList {
   }
 
   head() {
-    return this.headNode;
+    return this.headNode || null; // IMPROVEMENT: added '|| null' notation
   }
 
   tail() {
