@@ -64,7 +64,18 @@ class CustomSet {
   }
 
   union(inputSet) {
-    let unionArr = this.elements.reduce((union, element) => {
+    let union = new CustomSet(this.elements);
+
+    inputSet.elements.forEach(element => union.add(element)); // FIX: rewrote method take advantage of the add method, which only adds if the set doesn't contain the element yet
+
+    return union;
+  }
+}
+
+module.exports = CustomSet;
+
+/* OLD union implementation:
+let unionArr = this.elements.reduce((union, element) => {
       if (!inputSet.contains(element)) {
         union.push(element);
       }
@@ -74,6 +85,4 @@ class CustomSet {
 
     return new CustomSet(unionArr);
   }
-}
-
-module.exports = CustomSet;
+*/
